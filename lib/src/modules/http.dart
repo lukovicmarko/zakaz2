@@ -7,10 +7,17 @@ import 'dart:convert';
 class RequestResult {
   RequestResult(this.url);
   final String url;
+  // final Map<String, String> headers;
   final String apiUrl = dotenv.get('API_URL', fallback: 'API_URL not found');
 
-  Future getData() async {
-    http.Response response = await http.get(Uri.parse('${apiUrl}${url}'));
+  Future getData(token) async {
+    http.Response response = await http.get(
+      Uri.parse('${apiUrl}${url}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
@@ -19,13 +26,14 @@ class RequestResult {
   }
 
   Future sendData(body) async {
-    http.Response response = await http.post(Uri.parse('${apiUrl}${url}'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(body));
+    var postHeaders = {'Content-Type': 'application/json'};
+    http.Response response = await http.post(
+      Uri.parse('${apiUrl}${url}'),
+      headers: postHeaders,
+      body: jsonEncode(body),
+    );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       return json.decode(response.body);
     } else {
       return response.body;

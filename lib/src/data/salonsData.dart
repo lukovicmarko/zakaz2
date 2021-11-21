@@ -2,20 +2,31 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:zakazi/src/models/Salon.dart';
 import 'package:zakazi/src/modules/http.dart';
-// import 'package:flutter_config/flutter_config.dart';
+import 'package:localstorage/localstorage.dart';
 
 class SalonsData with ChangeNotifier {
   SalonsData() {
     getSalons();
   }
 
+  final LocalStorage storage = LocalStorage('localstorage_app');
   final List<Salon> _salons = [];
   Salon? salon;
 
+  getLocalStorage() async {
+    await storage.ready;
+
+    final token = storage.getItem("token");
+
+    return token;
+  }
+
   Future getSalons() async {
+    final token = await getLocalStorage();
+
     RequestResult requestResult = RequestResult('/salons/radius/34000/3000');
 
-    final salonsResponse = await requestResult.getData();
+    final salonsResponse = await requestResult.getData(token);
 
     salonsResponse['data'].forEach((salon) {
       _salons.add(
@@ -41,9 +52,11 @@ class SalonsData with ChangeNotifier {
   UnmodifiableListView<Salon> get salons => UnmodifiableListView(_salons);
 
   Future getSalonsById(String id) async {
+    final token = await getLocalStorage();
+
     RequestResult requestResult = RequestResult('/salons/$id');
 
-    final salonsResponse = await requestResult.getData();
+    final salonsResponse = await requestResult.getData(token);
 
     salon = Salon(
       id: salonsResponse["data"]['_id'],

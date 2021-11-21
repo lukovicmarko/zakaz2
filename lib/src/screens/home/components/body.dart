@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:zakazi/src/models/Category.dart';
 import 'package:zakazi/src/screens/home/components/sectionHeader.dart';
 
+import '../../../data/auth.dart';
 import 'categories.dart';
 import 'nearestSalons.dart';
 
@@ -17,6 +18,8 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<AuthData>(context, listen: false).user;
+
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 45.h),
@@ -69,7 +72,7 @@ class Body extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(top: 20.w),
               child: Text(
-                "Hi, User",
+                "Hi, ${user.name}",
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   color: Colors.black,

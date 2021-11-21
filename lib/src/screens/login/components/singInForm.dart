@@ -44,9 +44,11 @@ class _SignInFormState extends State<SignInForm> {
   void login() async {
     final userData = Provider.of<AuthData>(context, listen: false);
 
-    userData.loginUser(email, password);
+    await userData.loginUser(email, password);
 
-    // Navigator.pushNamed(context, HomeScreen.routeName);
+    if (userData.isLogged) {
+      Navigator.pushNamed(context, HomeScreen.routeName);
+    }
   }
 
   @override

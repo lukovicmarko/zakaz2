@@ -13,12 +13,12 @@ class SocialIcon extends StatelessWidget {
     return Container(
       width: 50.w,
       height: 50.h,
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(14.w),
       decoration: BoxDecoration(
         border: Border.all(
           color: kGreySocialIconColor,
         ),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
       ),
       child: SvgPicture.asset(
         icon,
