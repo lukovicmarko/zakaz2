@@ -9,10 +9,10 @@ import 'package:zakazi/src/screens/mainScreen.dart';
 import './routes.dart';
 import 'data/bottomNavigation.dart';
 import 'data/categoriesData.dart';
-import 'screens/home/home_screen.dart';
 
 class Zakazi extends StatelessWidget {
-  const Zakazi({Key? key}) : super(key: key);
+  const Zakazi({Key? key, required this.token}) : super(key: key);
+  final String? token;
 
   @override
   Widget build(BuildContext context) {

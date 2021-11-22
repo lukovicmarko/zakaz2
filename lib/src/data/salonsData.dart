@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
+import 'package:zakazi/src/data/auth.dart';
 import 'package:zakazi/src/models/Salon.dart';
 import 'package:zakazi/src/modules/http.dart';
 import 'package:localstorage/localstorage.dart';
@@ -13,20 +14,15 @@ class SalonsData with ChangeNotifier {
   final List<Salon> _salons = [];
   Salon? salon;
 
-  getLocalStorage() async {
-    await storage.ready;
-
-    final token = storage.getItem("token");
-
-    return token;
-  }
+  final authData = AuthData();
 
   Future getSalons() async {
-    final token = await getLocalStorage();
+    final token = await authData.getLocalStorage();
 
-    RequestResult requestResult = RequestResult('/salons/radius/34000/3000');
+    RequestResult requestResult =
+        RequestResult('/salons/radius/34000/3000', headers: {});
 
-    final salonsResponse = await requestResult.getData(token);
+    final salonsResponse = await requestResult.getData();
 
     salonsResponse['data'].forEach((salon) {
       _salons.add(
@@ -52,11 +48,11 @@ class SalonsData with ChangeNotifier {
   UnmodifiableListView<Salon> get salons => UnmodifiableListView(_salons);
 
   Future getSalonsById(String id) async {
-    final token = await getLocalStorage();
+    final token = await authData.getLocalStorage();
 
-    RequestResult requestResult = RequestResult('/salons/$id');
+    RequestResult requestResult = RequestResult('/salons/$id', headers: {});
 
-    final salonsResponse = await requestResult.getData(token);
+    final salonsResponse = await requestResult.getData();
 
     salon = Salon(
       id: salonsResponse["data"]['_id'],

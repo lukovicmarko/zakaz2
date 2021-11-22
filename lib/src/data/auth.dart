@@ -7,12 +7,16 @@ import 'package:zakazi/src/modules/http.dart';
 import '../models/User.dart';
 
 class AuthData with ChangeNotifier {
+  AuthData() {
+    getUser();
+  }
+
   final LocalStorage storage = LocalStorage('localstorage_app');
   bool _isLogged = false;
   late User _user;
 
   Future loginUser(email, password) async {
-    RequestResult requestResult = RequestResult('/auth/login');
+    RequestResult requestResult = RequestResult('/auth/login', headers: {});
 
     final response =
         await requestResult.sendData({"email": email, "password": password});
@@ -26,6 +30,27 @@ class AuthData with ChangeNotifier {
       _isLogged = true;
       saveUserToLocalStorage(_user);
       saveLocalStorage(response["token"]);
+    } else {
+      _isLogged = false;
+    }
+  }
+
+  Future getUser() async {
+    final token = await getLocalStorage();
+
+    RequestResult requestResult = RequestResult('/auth/user',
+        headers: {"Authorization": "Bearer $token"});
+
+    final response = await requestResult.getData();
+
+    if (response["success"] == true) {
+      _user = User(
+        id: response["data"]["_id"],
+        name: response["data"]["name"],
+        email: response["data"]["email"],
+      );
+      _isLogged = true;
+      saveUserToLocalStorage(_user);
     } else {
       _isLogged = false;
     }
@@ -52,7 +77,9 @@ class AuthData with ChangeNotifier {
     storage.setItem('userInfo', userInfo);
   }
 
-  void getUserFromLocalStorage() {
+  getUserFromLocalStorage() async {
+    await storage.ready;
+
     Map<String, dynamic> info = json.decode(storage.getItem('userInfo'));
 
     _user = User(
@@ -60,6 +87,8 @@ class AuthData with ChangeNotifier {
       name: info['name'],
       email: info['email'],
     );
+
+    _isLogged = true;
   }
 
   get user => _user;

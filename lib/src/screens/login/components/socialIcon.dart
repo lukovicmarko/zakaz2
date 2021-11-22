@@ -13,7 +13,7 @@ class SocialIcon extends StatelessWidget {
     return Container(
       width: 50.w,
       height: 50.h,
-      padding: EdgeInsets.all(14.w),
+      padding: EdgeInsets.all(11.w),
       decoration: BoxDecoration(
         border: Border.all(
           color: kGreySocialIconColor,

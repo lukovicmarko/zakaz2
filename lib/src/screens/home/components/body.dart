@@ -10,15 +10,21 @@ import 'package:zakazi/src/models/Category.dart';
 import 'package:zakazi/src/screens/home/components/sectionHeader.dart';
 
 import '../../../data/auth.dart';
+import '../../../models/User.dart';
 import 'categories.dart';
 import 'nearestSalons.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
 
   @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  @override
   Widget build(BuildContext context) {
-    final user = Provider.of<AuthData>(context, listen: false).user;
+    final user = Provider.of<AuthData>(context).user;
 
     return SafeArea(
       child: Padding(
