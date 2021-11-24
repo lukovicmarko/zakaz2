@@ -7,7 +7,7 @@ import 'package:zakazi/src/constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:zakazi/src/data/salonsData.dart';
 import 'package:zakazi/src/screens/home/components/sectionHeader.dart';
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../../../data/auth.dart';
 
 import 'categories.dart';
@@ -121,7 +121,10 @@ class _BodyState extends State<Body> {
                   NearestSalons(),
                 ],
               )
-            : const Center(child: Text("Loading")),
+            : const SpinKitDoubleBounce(
+                color: Colors.black,
+                size: 50.0,
+              ),
       ),
     );
   }

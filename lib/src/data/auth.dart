@@ -34,9 +34,12 @@ class AuthData with ChangeNotifier {
       _isLogged = true;
       saveUserToLocalStorage(_user);
       saveTokenToLocalStorage(response["token"]);
+      _isLogged = false;
     } else {
       _isLogged = false;
     }
+
+    notifyListeners();
   }
 
   Future getUser() async {
