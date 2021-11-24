@@ -1,23 +1,43 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:zakazi/src/data/auth.dart';
 import 'package:zakazi/src/models/Salon.dart';
 import 'package:zakazi/src/modules/http.dart';
 
 class SalonsData with ChangeNotifier {
   SalonsData() {
-    getSalons();
+    getLocation();
   }
 
-  //final LocalStorage storage = LocalStorage('localstorage_app');
   final List<Salon> _salons = [];
   Salon? salon;
+  String? _locationAddress;
 
   final authData = AuthData();
 
-  Future getSalons() async {
+  void getLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    final coordinates = Coordinates(position.latitude, position.longitude);
+    final address =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
+
+    final postalCode = address.first.postalCode;
+    final addressName = address.first.addressLine;
+
+    getSalons(postalCode);
+
+    _locationAddress = addressName;
+
+    notifyListeners();
+  }
+
+  Future getSalons(postalCode) async {
     RequestResult requestResult =
-        RequestResult('/salons/radius/34000/3000', headers: {});
+        RequestResult('/salons/radius/$postalCode/5000', headers: {});
 
     final salonsResponse = await requestResult.getData();
 
@@ -67,4 +87,6 @@ class SalonsData with ChangeNotifier {
 
     notifyListeners();
   }
+
+  get locationAddress => _locationAddress;
 }

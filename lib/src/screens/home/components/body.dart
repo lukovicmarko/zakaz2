@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:zakazi/src/constants.dart';
-import 'package:zakazi/src/data/categoriesData.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:zakazi/src/models/Category.dart';
+import 'package:zakazi/src/data/salonsData.dart';
 import 'package:zakazi/src/screens/home/components/sectionHeader.dart';
 
 import '../../../data/auth.dart';
-import '../../../models/User.dart';
+
 import 'categories.dart';
 import 'nearestSalons.dart';
 
@@ -25,6 +24,7 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<AuthData>(context);
+    final salonData = Provider.of<SalonsData>(context);
 
     return SafeArea(
       child: Padding(
@@ -94,8 +94,9 @@ class _BodyState extends State<Body> {
                         "assets/icons/stroke/Map-pin(stroke).svg",
                         color: kGreyIconColor,
                       ),
+                      SizedBox(width: 7.h),
                       Text(
-                        '6391 Elgin St. Celina, Delaware 10299',
+                        '${salonData.locationAddress}',
                         style: TextStyle(
                           color: kGreyTextColor,
                           fontSize: 13.sp,
