@@ -1,19 +1,22 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:localstorage/localstorage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:zakazi/src/modules/http.dart';
 
 import '../models/User.dart';
 
 class AuthData with ChangeNotifier {
   AuthData() {
-    getUser();
+    getUserFromLocalStorage();
   }
 
-  final LocalStorage storage = LocalStorage('localstorage_app');
   bool _isLogged = false;
   late User _user;
+  SharedPreferences? storage;
+
+  //var token =  await getAccessTokenToStorage();
 
   Future loginUser(email, password) async {
     RequestResult requestResult = RequestResult('/auth/login', headers: {});
@@ -26,44 +29,49 @@ class AuthData with ChangeNotifier {
         id: response["user"]["_id"],
         name: response["user"]["name"],
         email: response["user"]["email"],
+        image: response["user"]["image"] ?? "assets/images/user.png",
       );
       _isLogged = true;
       saveUserToLocalStorage(_user);
-      saveLocalStorage(response["token"]);
+      saveTokenToLocalStorage(response["token"]);
     } else {
       _isLogged = false;
     }
   }
 
   Future getUser() async {
-    final token = await getLocalStorage();
+    // final token = await getLocalStorage();
 
-    RequestResult requestResult = RequestResult('/auth/user',
-        headers: {"Authorization": "Bearer $token"});
+    // RequestResult requestResult = RequestResult('/auth/user',
+    //     headers: {"Authorization": "Bearer $token"});
 
-    final response = await requestResult.getData();
+    // final response = await requestResult.getData();
 
-    if (response["success"] == true) {
-      _user = User(
-        id: response["data"]["_id"],
-        name: response["data"]["name"],
-        email: response["data"]["email"],
-      );
-      _isLogged = true;
-      saveUserToLocalStorage(_user);
-    } else {
-      _isLogged = false;
-    }
+    // if (response["success"] == true) {
+    //   _user = User(
+    //     id: response["data"]["_id"],
+    //     name: response["data"]["name"],
+    //     email: response["data"]["email"],
+    //   );
+    //   _isLogged = true;
+    //   saveUserToLocalStorage(_user);
+    // } else {
+    //   _isLogged = false;
+    // }
   }
 
-  void saveLocalStorage(accessToken) {
-    storage.setItem('token', accessToken);
+  // void saveLocalStorage(accessToken) {
+  //   storage.setItem('token', accessToken);
+  // }
+
+  void saveTokenToLocalStorage(token) async {
+    storage = await SharedPreferences.getInstance();
+    storage?.setString("token", token);
   }
 
-  getLocalStorage() async {
-    await storage.ready;
-
-    final token = storage.getItem("token");
+  getAccessTokenFromStorage() async {
+    storage = await SharedPreferences.getInstance();
+    var token = storage?.getString("token");
 
     return token;
   }
@@ -73,22 +81,27 @@ class AuthData with ChangeNotifier {
       'id': user.id,
       'name': user.name,
       'email': user.email,
+      'image': user.image,
     });
-    storage.setItem('userInfo', userInfo);
+    storage?.setString('userInfo', userInfo);
   }
 
   getUserFromLocalStorage() async {
-    await storage.ready;
+    storage = await SharedPreferences.getInstance();
+    var userInfo = storage?.getString("userInfo");
 
-    Map<String, dynamic> info = json.decode(storage.getItem('userInfo'));
+    var userData = json.decode(userInfo!);
 
     _user = User(
-      id: info['id'],
-      name: info['name'],
-      email: info['email'],
+      id: userData['id'],
+      name: userData['name'],
+      email: userData['email'],
+      image: userData["image"] ?? "assets/images/user.png",
     );
 
     _isLogged = true;
+
+    notifyListeners();
   }
 
   get user => _user;

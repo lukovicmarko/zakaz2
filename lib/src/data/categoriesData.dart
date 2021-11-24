@@ -1,6 +1,6 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
-import 'package:localstorage/localstorage.dart';
+
 import 'package:zakazi/src/data/auth.dart';
 
 import 'package:zakazi/src/models/Category.dart';
@@ -14,12 +14,10 @@ class CategoriesData with ChangeNotifier {
 
   final authData = AuthData();
 
-  final LocalStorage storage = LocalStorage('localstorage_app');
-
   final List<Category> _categories = [];
 
   Future getCategories() async {
-    final token = await authData.getLocalStorage();
+    final token = await authData.getAccessTokenFromStorage();
 
     RequestResult requestResult = RequestResult('/categories',
         headers: {"Authorization": "Bearer $token"});

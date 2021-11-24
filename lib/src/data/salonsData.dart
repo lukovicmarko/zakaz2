@@ -3,22 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:zakazi/src/data/auth.dart';
 import 'package:zakazi/src/models/Salon.dart';
 import 'package:zakazi/src/modules/http.dart';
-import 'package:localstorage/localstorage.dart';
 
 class SalonsData with ChangeNotifier {
   SalonsData() {
     getSalons();
   }
 
-  final LocalStorage storage = LocalStorage('localstorage_app');
+  //final LocalStorage storage = LocalStorage('localstorage_app');
   final List<Salon> _salons = [];
   Salon? salon;
 
   final authData = AuthData();
 
   Future getSalons() async {
-    final token = await authData.getLocalStorage();
-
     RequestResult requestResult =
         RequestResult('/salons/radius/34000/3000', headers: {});
 
@@ -48,7 +45,7 @@ class SalonsData with ChangeNotifier {
   UnmodifiableListView<Salon> get salons => UnmodifiableListView(_salons);
 
   Future getSalonsById(String id) async {
-    final token = await authData.getLocalStorage();
+    final token = await authData.getAccessTokenFromStorage();
 
     RequestResult requestResult = RequestResult('/salons/$id', headers: {});
 

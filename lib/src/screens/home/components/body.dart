@@ -24,103 +24,103 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<AuthData>(context).user;
+    final userData = Provider.of<AuthData>(context);
 
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 45.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset(
-                  "assets/images/Avatar.png",
-                  width: 40.w,
-                  height: 40.h,
-                ),
-                Row(
-                  children: [
-                    Container(
-                      width: 40.w,
-                      height: 40.h,
-                      padding: const EdgeInsets.all(11.0),
-                      decoration: BoxDecoration(
-                        // shape: BoxShape.circle,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(width: 1, color: kGreyColor),
+        child: userData.isLogged
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Image.asset(
+                        userData.user.image,
+                        width: 40.w,
+                        height: 40.h,
                       ),
-                      child: SvgPicture.asset(
-                        "assets/icons/stroke/bell.svg",
-                        color: Colors.black,
+                      Row(
+                        children: [
+                          Container(
+                            width: 40.w,
+                            height: 40.h,
+                            padding: const EdgeInsets.all(11.0),
+                            decoration: BoxDecoration(
+                              // shape: BoxShape.circle,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(width: 1, color: kGreyColor),
+                            ),
+                            child: SvgPicture.asset(
+                              "assets/icons/stroke/bell.svg",
+                              color: Colors.black,
+                            ),
+                          ),
+                          SizedBox(width: 10.w),
+                          Container(
+                            width: 40.w,
+                            height: 40.h,
+                            padding: const EdgeInsets.all(11.0),
+                            decoration: BoxDecoration(
+                              // shape: BoxShape.circle,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(width: 1, color: kGreyColor),
+                            ),
+                            child: SvgPicture.asset(
+                              "assets/icons/stroke/Search(stroke).svg",
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(width: 10.w),
-                    Container(
-                      width: 40.w,
-                      height: 40.h,
-                      padding: const EdgeInsets.all(11.0),
-                      decoration: BoxDecoration(
-                        // shape: BoxShape.circle,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(width: 1, color: kGreyColor),
-                      ),
-                      child: SvgPicture.asset(
-                        "assets/icons/stroke/Search(stroke).svg",
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 20.w),
-              child: Text(
-                "Hi, ${user.name}",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                  fontSize: 25.sp,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 7.h,
-            ),
-            Row(
-              children: [
-                SvgPicture.asset(
-                  "assets/icons/stroke/Map-pin(stroke).svg",
-                  color: kGreyIconColor,
-                ),
-                Text(
-                  '6391 Elgin St. Celina, Delaware 10299',
-                  style: TextStyle(
-                    color: kGreyTextColor,
-                    fontSize: 13.sp,
+                    ],
                   ),
-                )
-              ],
-            ),
-            SizedBox(height: 30.h),
-            // SectionHeader(textTitle: "Appointment", textTitleSubtitle: "Today"),
-            SectionHeader(
-              textTitle: "Services",
-              textTitleSubtitle: "",
-            ),
-            SizedBox(height: 15.h),
-            Categories(),
-            SizedBox(height: 25.h),
-            SectionHeader(
-              textTitle: "Nearest salon",
-              textTitleSubtitle: "View All",
-            ),
-            SizedBox(height: 15.h),
-            NearestSalons(),
-          ],
-        ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20.w),
+                    child: Text(
+                      "Hi, ${userData.user.name}",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                        fontSize: 25.sp,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 7.h),
+                  Row(
+                    children: [
+                      SvgPicture.asset(
+                        "assets/icons/stroke/Map-pin(stroke).svg",
+                        color: kGreyIconColor,
+                      ),
+                      Text(
+                        '6391 Elgin St. Celina, Delaware 10299',
+                        style: TextStyle(
+                          color: kGreyTextColor,
+                          fontSize: 13.sp,
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 30.h),
+                  // SectionHeader(textTitle: "Appointment", textTitleSubtitle: "Today"),
+                  SectionHeader(
+                    textTitle: "Services",
+                    textTitleSubtitle: "",
+                  ),
+                  SizedBox(height: 15.h),
+                  Categories(),
+                  SizedBox(height: 25.h),
+                  SectionHeader(
+                    textTitle: "Nearest salon",
+                    textTitleSubtitle: "View All",
+                  ),
+                  SizedBox(height: 15.h),
+                  NearestSalons(),
+                ],
+              )
+            : const Center(child: Text("Loading")),
       ),
     );
   }

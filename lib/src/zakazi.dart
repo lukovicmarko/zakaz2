@@ -40,10 +40,12 @@ class Zakazi extends StatelessWidget {
             // primarySwatch: Colors.blue,
             fontFamily: "Poppins",
             textTheme: const TextTheme(
-                bodyText1: TextStyle(color: Colors.black),
-                bodyText2: TextStyle(color: Colors.black)),
+              bodyText1: TextStyle(color: Colors.black),
+              bodyText2: TextStyle(color: Colors.black),
+            ),
           ),
-          initialRoute: LoginScreen.routeName,
+          initialRoute:
+              token != null ? MainScreen.routeName : LoginScreen.routeName,
           routes: routes,
         ),
         designSize: const Size(375, 812),
