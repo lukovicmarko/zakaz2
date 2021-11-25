@@ -13,15 +13,16 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   @override
   Widget build(BuildContext context) {
-    // final SalonDetailsArguments agrs =
-    //     ModalRoute.of(context)!.settings.arguments as SalonDetailsArguments;
+    final SalonDetailsArguments arg =
+        ModalRoute.of(context)!.settings.arguments as SalonDetailsArguments;
     return Scaffold(
-      body: Body(),
+      body: Body(salon: arg.salon),
     );
   }
 }
 
 class SalonDetailsArguments {
-  SalonDetailsArguments(this.id);
-  final String id;
+  final Salon salon;
+
+  SalonDetailsArguments({required this.salon});
 }

@@ -8,7 +8,26 @@ import 'package:zakazi/src/screens/details/detailsScreen.dart';
 import 'nearestSalonCard.dart';
 
 // ignore: use_key_in_widget_constructors
-class NearestSalons extends StatelessWidget {
+class NearestSalons extends StatefulWidget {
+  @override
+  State<NearestSalons> createState() => _NearestSalonsState();
+}
+
+class _NearestSalonsState extends State<NearestSalons> {
+  void login(String id) async {
+    final salonData = SalonsData();
+
+    await salonData.getSalonsById(id);
+
+    if (salonData.loading) {
+      Navigator.pushNamed(
+        context,
+        DetailsScreen.routeName,
+        arguments: SalonDetailsArguments(salon: salonData.salon),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     //final provider = Provider.of<SalonsData>(context);
@@ -27,12 +46,7 @@ class NearestSalons extends StatelessWidget {
             return NearestSalonCard(
               salon: salons.salons[index],
               press: () => {
-                // salons.getSalonsById(salons.salons[index].id),
-                Navigator.pushNamed(
-                  context,
-                  DetailsScreen.routeName,
-                  // arguments: SalonDetailsArguments(salons.salons[index].id),
-                ),
+                login(salons.salons[index].id),
               },
             );
           },

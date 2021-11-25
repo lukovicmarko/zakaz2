@@ -12,8 +12,9 @@ class SalonsData with ChangeNotifier {
   }
 
   final List<Salon> _salons = [];
-  Salon? salon;
+  Salon? _salon;
   String? _locationAddress;
+  bool _loading = false;
 
   final authData = AuthData();
 
@@ -36,8 +37,11 @@ class SalonsData with ChangeNotifier {
   }
 
   Future getSalons(postalCode) async {
-    RequestResult requestResult =
-        RequestResult('/salons/radius/$postalCode/5000', headers: {});
+    final token = await authData.getAccessTokenFromStorage();
+
+    RequestResult requestResult = RequestResult(
+        '/salons/radius/$postalCode/5000',
+        headers: {"Authorization": "Bearer $token"});
 
     final salonsResponse = await requestResult.getData();
 
@@ -65,28 +69,38 @@ class SalonsData with ChangeNotifier {
   UnmodifiableListView<Salon> get salons => UnmodifiableListView(_salons);
 
   Future getSalonsById(String id) async {
+    _loading = true;
+
     final token = await authData.getAccessTokenFromStorage();
 
-    RequestResult requestResult = RequestResult('/salons/$id', headers: {});
+    RequestResult requestResult = RequestResult('/salons/$id',
+        headers: {"Authorization": "Bearer $token"});
 
     final salonsResponse = await requestResult.getData();
 
-    salon = Salon(
-      id: salonsResponse["data"]['_id'],
-      name: salonsResponse["data"]['name'],
-      image: salonsResponse["data"]['photo'],
-      description: salonsResponse["data"]['description'],
-      category: salonsResponse["data"]['category'],
-      reviews: salonsResponse["data"]['reviews'],
-      rating: salonsResponse["data"]['rating'],
-      numReviews: salonsResponse["data"]['numReviews'],
-      website: salonsResponse["data"]['website'],
-      phone: salonsResponse["data"]['phone'],
-      address: salonsResponse["data"]['location']['street'],
-    );
+    if (salonsResponse["success"] == true) {
+      _salon = Salon(
+        id: salonsResponse["data"]['_id'],
+        name: salonsResponse["data"]['name'],
+        image: salonsResponse["data"]['photo'],
+        description: salonsResponse["data"]['description'],
+        category: salonsResponse["data"]['category'],
+        reviews: salonsResponse["data"]['reviews'],
+        rating: salonsResponse["data"]['rating'],
+        numReviews: salonsResponse["data"]['numReviews'],
+        website: salonsResponse["data"]['website'],
+        phone: salonsResponse["data"]['phone'],
+        address: salonsResponse["data"]['location']['street'],
+      );
+      _loading = true;
+    } else {
+      _loading = false;
+    }
 
     notifyListeners();
   }
 
   get locationAddress => _locationAddress;
+  get loading => _loading;
+  get salon => _salon;
 }
