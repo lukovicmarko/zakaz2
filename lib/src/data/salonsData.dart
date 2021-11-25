@@ -1,6 +1,6 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
-import 'package:geocoder/geocoder.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:zakazi/src/data/auth.dart';
 import 'package:zakazi/src/models/Salon.dart';
@@ -22,12 +22,11 @@ class SalonsData with ChangeNotifier {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
-    final coordinates = Coordinates(position.latitude, position.longitude);
-    final address =
-        await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
 
-    final postalCode = address.first.postalCode;
-    final addressName = address.first.addressLine;
+    final postalCode = placemarks[0].postalCode;
+    final addressName = placemarks[0].street;
 
     getSalons(postalCode);
 
