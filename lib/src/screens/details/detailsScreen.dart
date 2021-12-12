@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:zakazi/src/models/Salon.dart';
 import 'package:zakazi/src/screens/details/components/body.dart';
 
@@ -16,7 +17,34 @@ class _DetailsScreenState extends State<DetailsScreen> {
     final SalonDetailsArguments arg =
         ModalRoute.of(context)!.settings.arguments as SalonDetailsArguments;
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: buildAppBar(),
       body: Body(salon: arg.salon),
+    );
+  }
+
+  AppBar buildAppBar() {
+    return AppBar(
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      leading: IconButton(
+        icon: SvgPicture.asset(
+          "assets/icons/stroke/Arrow-left(stroke).svg",
+          color: Colors.white,
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      actions: [
+        IconButton(
+          icon: SvgPicture.asset(
+            "assets/icons/stroke/Heart(stroke).svg",
+            color: Colors.white,
+          ),
+          onPressed: () {},
+        )
+      ],
     );
   }
 }

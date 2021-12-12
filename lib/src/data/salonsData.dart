@@ -15,6 +15,8 @@ class SalonsData with ChangeNotifier {
   Salon? _salon;
   String? _locationAddress;
   bool _loading = false;
+  double _latitude = 0.0;
+  double _longitude = 0.0;
 
   final authData = AuthData();
 
@@ -27,6 +29,9 @@ class SalonsData with ChangeNotifier {
 
     final postalCode = placemarks[0].postalCode;
     final addressName = placemarks[0].street;
+
+    _latitude = position.latitude;
+    _longitude = position.longitude;
 
     getSalons(postalCode);
 
@@ -47,18 +52,26 @@ class SalonsData with ChangeNotifier {
     salonsResponse['data'].forEach((salon) {
       _salons.add(
         Salon(
-          id: salon['_id'],
-          name: salon['name'],
-          image: salon['photo'],
-          description: salon['description'],
-          category: salon['category'],
-          reviews: salon['reviews'],
-          rating: salon['rating'],
-          numReviews: salon['numReviews'],
-          website: salon['website'],
-          phone: salon['phone'],
-          address: salon['location']['street'],
-        ),
+            id: salon['_id'],
+            name: salon['name'],
+            image: salon['photo'],
+            description: salon['description'],
+            category: salon['category'],
+            reviews: salon['reviews'],
+            rating: salon['rating'],
+            numReviews: salon['numReviews'],
+            website: salon['website'],
+            phone: salon['phone'],
+            address: salon['location']['street'],
+            coordinates: salon['location']['coordinates'],
+            distance: (Geolocator.distanceBetween(
+                      _latitude,
+                      _longitude,
+                      salon['location']['coordinates'][1],
+                      salon['location']['coordinates'][0],
+                    ) /
+                    1000)
+                .toStringAsFixed(1)),
       );
     });
 
@@ -90,7 +103,62 @@ class SalonsData with ChangeNotifier {
         website: salonsResponse["data"]['website'],
         phone: salonsResponse["data"]['phone'],
         address: salonsResponse["data"]['location']['street'],
+        coordinates: salonsResponse["data"]['location']['coordinates'],
+        distance: (Geolocator.distanceBetween(
+                  _latitude,
+                  _longitude,
+                  salonsResponse["data"]['location']['coordinates'][1],
+                  salonsResponse["data"]['location']['coordinates'][0],
+                ) /
+                1000)
+            .toStringAsFixed(1),
       );
+
+      _loading = true;
+    } else {
+      _loading = false;
+    }
+
+    notifyListeners();
+  }
+
+  Future getSalonsByCategoryId(String id) async {
+    _loading = true;
+
+    final token = await authData.getAccessTokenFromStorage();
+
+    RequestResult requestResult = RequestResult('/categories/$id/salon',
+        headers: {"Authorization": "Bearer $token"});
+
+    final salonsResponse = await requestResult.getData();
+
+    if (salonsResponse["success"] == true) {
+      salonsResponse['data'].forEach((salon) {
+        _salons.add(
+          Salon(
+              id: salon['_id'],
+              name: salon['name'],
+              image: salon['photo'],
+              description: salon['description'],
+              category: salon['category'],
+              reviews: salon['reviews'],
+              rating: salon['rating'],
+              numReviews: salon['numReviews'],
+              website: salon['website'],
+              phone: salon['phone'],
+              address: salon['location']['street'],
+              coordinates: salon['location']['coordinates'],
+              distance: (Geolocator.distanceBetween(
+                        _latitude,
+                        _longitude,
+                        salon['location']['coordinates'][1],
+                        salon['location']['coordinates'][0],
+                      ) /
+                      1000)
+                  .toStringAsFixed(1)),
+        );
+      });
+
       _loading = true;
     } else {
       _loading = false;

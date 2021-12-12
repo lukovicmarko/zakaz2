@@ -5,6 +5,7 @@ import 'package:zakazi/src/components/sectionSubtitle.dart';
 import 'package:zakazi/src/components/sectionTitle.dart';
 import 'package:zakazi/src/screens/login/components/singInForm.dart';
 import 'package:zakazi/src/screens/login/components/socialIcon.dart';
+import 'package:zakazi/src/screens/register/components/registerForm.dart';
 
 import '../../register/registerScreen.dart';
 
@@ -19,43 +20,12 @@ class Body extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SectionTitle(title: "Welcome"),
+            const SectionTitle(title: "Sign Up"),
             SizedBox(height: 5.h),
-            const SectionSubTitle(subTitle: "Sign in to continue"),
+            const SectionSubTitle(subTitle: "Create a new account"),
             SizedBox(height: 40.h),
-            const SignInForm(),
+            const RegisterForm(),
             SizedBox(height: 34.h),
-            Center(
-              child: Text(
-                'Or Continue with',
-                style: TextStyle(
-                  color: const Color(0XFF5E5D65),
-                  fontSize: 13.sp,
-                ),
-              ),
-            ),
-            SizedBox(height: 28.h),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 52.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SocialIcon(icon: "assets/icons/social/Facebook(social).svg"),
-                  SocialIcon(icon: "assets/icons/social/Google(social).svg"),
-                  SocialIcon(icon: "assets/icons/social/Twitter(social).svg")
-                ],
-              ),
-            ),
-            SizedBox(height: 55.h),
-            Center(
-              child: Text(
-                'Forgot your password?',
-                style: TextStyle(
-                  color: const Color(0XFFABAAB1),
-                  fontSize: 13.sp,
-                ),
-              ),
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

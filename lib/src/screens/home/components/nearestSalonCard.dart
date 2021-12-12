@@ -74,7 +74,7 @@ class NearestSalonCard extends StatelessWidget {
                               height: 11.h,
                             ),
                             SizedBox(width: 4.w),
-                            const Text('5km')
+                            Text('${salon.distance} km'),
                           ],
                         )
                       ],

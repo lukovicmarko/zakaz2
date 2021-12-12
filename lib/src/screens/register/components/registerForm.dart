@@ -8,21 +8,23 @@ import 'package:zakazi/src/components/buttonMedium.dart';
 import 'package:zakazi/src/components/formError.dart';
 // import 'package:zakazi/src/components/passwordFormField.dart';
 import 'package:zakazi/src/constants.dart';
-import 'package:zakazi/src/data/auth.dart';
-import 'package:zakazi/src/screens/home/home_screen.dart';
 
-class SignInForm extends StatefulWidget {
-  const SignInForm({Key? key}) : super(key: key);
+import '../../../data/auth.dart';
+import '../../home/home_screen.dart';
+
+class RegisterForm extends StatefulWidget {
+  const RegisterForm({Key? key}) : super(key: key);
 
   @override
-  _SignInFormState createState() => _SignInFormState();
+  _RegisterFormState createState() => _RegisterFormState();
 }
 
-class _SignInFormState extends State<SignInForm> {
+class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
+  String? name;
   String? email;
   String? password;
-  bool? remember = false;
+
   final List<String?> errors = [];
 
   void addError({String? error}) {
@@ -41,12 +43,12 @@ class _SignInFormState extends State<SignInForm> {
     }
   }
 
-  void login() async {
+  void signUp() async {
     final userData = Provider.of<AuthData>(context, listen: false);
 
-    await userData.loginUser(email, password);
+    await userData.signUpUser(name, email, password);
 
-    if (userData.isLogged) {
+    if (userData.isAuthenticated) {
       Navigator.pushNamed(context, HomeScreen.routeName);
     }
   }
@@ -57,23 +59,76 @@ class _SignInFormState extends State<SignInForm> {
       key: _formKey,
       child: Column(
         children: [
+          buildNameFormField(),
+          SizedBox(height: errors.isNotEmpty ? 20.h : 20.h),
           buildEmailFormField(),
-          SizedBox(height: errors.isNotEmpty ? 0.0 : 20.h),
+          SizedBox(height: errors.isNotEmpty ? 20.h : 20.h),
           buildPasswordFormField(),
           SizedBox(height: 15.h),
           FormError(errors: errors),
           SizedBox(height: 15.h),
           ButtonMedium(
-            name: "Sign In",
+            name: "Sign Up",
             onPress: () {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
                 // if all are valid then go to success screen
-                login();
+                signUp();
               }
             },
           ),
         ],
+      ),
+    );
+  }
+
+  TextFormField buildNameFormField() {
+    return TextFormField(
+      keyboardType: TextInputType.name,
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          removeError(error: kNameNullError);
+        }
+      },
+      onSaved: (newValue) => name = newValue,
+      validator: (value) {
+        if (value!.isEmpty) {
+          addError(error: kNameNullError);
+          return "";
+        }
+      },
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: kInputGreyColor,
+        hintText: "Name",
+        contentPadding: EdgeInsets.symmetric(
+          vertical: 20.w,
+          horizontal: 20.h,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: const BorderSide(color: kInputGreyColor, width: 1.0),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: const BorderSide(color: Colors.red, width: 1.0),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: const BorderSide(color: kInputGreyColor, width: 1.0),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: const BorderSide(color: Colors.red, width: 1.0),
+        ),
+        disabledBorder: InputBorder.none,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        prefixIcon: Padding(
+          padding: EdgeInsets.only(left: 20.w, right: 10.w),
+          child: SvgPicture.asset("assets/icons/stroke/User(stroke).svg"),
+        ),
       ),
     );
   }
@@ -84,8 +139,9 @@ class _SignInFormState extends State<SignInForm> {
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kEmailNullError);
-        } else if (emailValidatorRegExp.hasMatch(value)) {
-          removeError(error: kInvalidEmailError);
+          if (emailValidatorRegExp.hasMatch(value)) {
+            removeError(error: kInvalidEmailError);
+          }
         }
       },
       onSaved: (newValue) => email = newValue,
@@ -141,8 +197,9 @@ class _SignInFormState extends State<SignInForm> {
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
-        } else if (value.length >= 6) {
-          removeError(error: kShortPassError);
+          if (value.length >= 6) {
+            removeError(error: kShortPassError);
+          }
         }
       },
 

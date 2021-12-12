@@ -13,6 +13,7 @@ class AuthData with ChangeNotifier {
   }
 
   bool _isLogged = false;
+  bool _isAuthenticated = false;
   late User _user;
   SharedPreferences? storage;
 
@@ -36,6 +37,31 @@ class AuthData with ChangeNotifier {
       saveTokenToLocalStorage(response["token"]);
     } else {
       _isLogged = false;
+    }
+
+    notifyListeners();
+  }
+
+  Future signUpUser(name, email, password) async {
+    RequestResult requestResult = RequestResult('/auth/register', headers: {});
+
+    final response = await requestResult
+        .sendData({"name": name, "email": email, "password": password});
+
+    if (response["success"] == true) {
+      _user = User(
+        id: response["user"]["_id"],
+        name: response["user"]["name"],
+        email: response["user"]["email"],
+        image: response["user"]["image"] ?? "assets/images/user.png",
+      );
+      _isLogged = true;
+      _isAuthenticated = true;
+      saveUserToLocalStorage(_user);
+      saveTokenToLocalStorage(response["token"]);
+    } else {
+      _isLogged = false;
+      _isAuthenticated = false;
     }
 
     notifyListeners();
@@ -108,4 +134,5 @@ class AuthData with ChangeNotifier {
 
   get user => _user;
   get isLogged => _isLogged;
+  get isAuthenticated => _isAuthenticated;
 }

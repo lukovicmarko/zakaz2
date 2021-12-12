@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SetctionTitle extends StatelessWidget {
-  SetctionTitle({required this.title});
+class SectionTitle extends StatelessWidget {
+  // ignore: use_key_in_widget_constructors
+  const SectionTitle({required this.title});
 
   final String title;
 

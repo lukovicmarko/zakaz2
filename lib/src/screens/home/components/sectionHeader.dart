@@ -7,10 +7,12 @@ class SectionHeader extends StatelessWidget {
   SectionHeader({
     required this.textTitle,
     required this.textTitleSubtitle,
+    required this.press,
   });
 
   final String textTitle;
   final String textTitleSubtitle;
+  final VoidCallback press;
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +27,14 @@ class SectionHeader extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        Text(
-          textTitleSubtitle,
-          style: TextStyle(
-            color: kGreyTextColor,
-            fontSize: 13.sp,
+        GestureDetector(
+          onTap: press,
+          child: Text(
+            textTitleSubtitle,
+            style: TextStyle(
+              color: kGreyTextColor,
+              fontSize: 13.sp,
+            ),
           ),
         )
       ],

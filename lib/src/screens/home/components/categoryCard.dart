@@ -7,34 +7,39 @@ class CategoryCard extends StatelessWidget {
   CategoryCard({
     Key? key,
     required this.category,
+    required this.press,
   }) : super(key: key);
 
   final Category category;
+  final GestureTapCallback press;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          width: 90.w,
-          height: 92.h,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(25),
-            child: Image.network(
-              category.image,
-              fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: press,
+      child: Column(
+        children: [
+          SizedBox(
+            width: 90.w,
+            height: 92.h,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(25),
+              child: Image.network(
+                category.image,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
-        SizedBox(height: 10.h),
-        Text(
-          category.name,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 13.sp,
+          SizedBox(height: 10.h),
+          Text(
+            category.name,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 13.sp,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
