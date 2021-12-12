@@ -3,21 +3,24 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:zakazi/src/data/categoriesData.dart';
 import '../../../data/salonsData.dart';
+import '../../search/searchScreen.dart';
 import 'categoryCard.dart';
 
 // ignore: use_key_in_widget_constructors
-class Categories extends StatelessWidget {
-  void getSalonByCategory(String id) async {
+class Categories extends StatefulWidget {
+  @override
+  State<Categories> createState() => _CategoriesState();
+}
+
+class _CategoriesState extends State<Categories> {
+  void getSalonByCategory(String id, int index) async {
     final salonData = SalonsData();
 
     await salonData.getSalonsByCategoryId(id);
 
     if (salonData.loading) {
-      // Navigator.pushNamed(
-      //   context,
-      //   DetailsScreen.routeName,
-      //   arguments: SalonDetailsArguments(salon: salonData.salon),
-      // );
+      Navigator.pushNamed(context, SearchScreen.routeName,
+          arguments: SearchArguments(index: index));
     }
   }
 
@@ -38,7 +41,7 @@ class Categories extends StatelessWidget {
           itemBuilder: (context, index) {
             return CategoryCard(
               press: () => {
-                getSalonByCategory(categories.categories[index].id),
+                getSalonByCategory(categories.categories[index].id, index),
               },
               category: categories.categories[index],
             );
