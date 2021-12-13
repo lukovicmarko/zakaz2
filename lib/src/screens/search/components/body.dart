@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:zakazi/src/constants.dart';
 
 import '../../../data/categoriesData.dart';
+import '../../../data/salonsData.dart';
 import '../../../models/Category.dart';
 
 class Body extends StatelessWidget {
@@ -14,15 +15,27 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final categoriesData = Provider.of<CategoriesData>(context);
+    final salonsData = Provider.of<SalonsData>(context);
 
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 25.h),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Categories(
               categories: categoriesData.categories,
               selectedIndex: index,
+            ),
+            SizedBox(height: 20.h),
+            Text(
+              'Results found (${salonsData.salons.length})',
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
+            Expanded(
+              child: ListView(
+                children: [Text('marko'), Text('marko')],
+              ),
             )
           ],
         ),
@@ -45,22 +58,26 @@ class Categories extends StatefulWidget {
 class _CategoriesState extends State<Categories> {
   @override
   Widget build(BuildContext context) {
+    final salonsData = Provider.of<SalonsData>(context);
     return SizedBox(
       height: 40.h,
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         itemCount: widget.categories.length,
-        itemBuilder: (context, index) => buildCategory(index),
+        itemBuilder: (context, index) =>
+            buildCategory(index, salonsData, widget.categories[index].id),
       ),
     );
   }
 
-  Widget buildCategory(int index) {
+  Widget buildCategory(int index, salonsData, String id) {
     return GestureDetector(
       onTap: () {
         setState(() {
           widget.selectedIndex = index;
+
+          // salonsData.getSalonsByCategoryId(id);
         });
       },
       child: Padding(

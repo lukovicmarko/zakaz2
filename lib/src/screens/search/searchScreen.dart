@@ -12,7 +12,6 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final SearchArguments arg =
         ModalRoute.of(context)!.settings.arguments as SearchArguments;
-
     return Scaffold(
       appBar: buildAppBar(context),
       body: Body(index: arg.index),

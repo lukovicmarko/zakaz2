@@ -4,6 +4,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:zakazi/src/data/auth.dart';
 import 'package:zakazi/src/models/Salon.dart';
+import 'package:zakazi/src/models/Specialist.dart';
 import 'package:zakazi/src/modules/http.dart';
 
 class SalonsData with ChangeNotifier {
@@ -12,11 +13,15 @@ class SalonsData with ChangeNotifier {
   }
 
   final List<Salon> _salons = [];
+  final List<Salon> _salonsByCategory = [];
   Salon? _salon;
   String? _locationAddress;
   bool _loading = false;
   double _latitude = 0.0;
   double _longitude = 0.0;
+  int _selectedTabIndex = 0;
+
+  List<String> tabs = ['About', 'Services', 'Galery', 'Reviews'];
 
   final authData = AuthData();
 
@@ -64,6 +69,9 @@ class SalonsData with ChangeNotifier {
             phone: salon['phone'],
             address: salon['location']['street'],
             coordinates: salon['location']['coordinates'],
+            specialist: salon['specialist'] != null
+                ? buildSpecialistList(salon['specialist'])
+                : [],
             distance: (Geolocator.distanceBetween(
                       _latitude,
                       _longitude,
@@ -104,6 +112,7 @@ class SalonsData with ChangeNotifier {
         phone: salonsResponse["data"]['phone'],
         address: salonsResponse["data"]['location']['street'],
         coordinates: salonsResponse["data"]['location']['coordinates'],
+        specialist: buildSpecialistList(salonsResponse["data"]['specialist']),
         distance: (Geolocator.distanceBetween(
                   _latitude,
                   _longitude,
@@ -134,7 +143,7 @@ class SalonsData with ChangeNotifier {
 
     if (salonsResponse["success"] == true) {
       salonsResponse['data'].forEach((salon) {
-        _salons.add(
+        _salonsByCategory.add(
           Salon(
               id: salon['_id'],
               name: salon['name'],
@@ -148,6 +157,9 @@ class SalonsData with ChangeNotifier {
               phone: salon['phone'],
               address: salon['location']['street'],
               coordinates: salon['location']['coordinates'],
+              specialist: salon['specialist'] != null
+                  ? buildSpecialistList(salon['specialist'])
+                  : [],
               distance: (Geolocator.distanceBetween(
                         _latitude,
                         _longitude,
@@ -167,7 +179,23 @@ class SalonsData with ChangeNotifier {
     notifyListeners();
   }
 
+  buildSpecialistList(specialists) {
+    final List<Specialist> items = [];
+    specialists.forEach((item) {
+      items.add(Specialist(name: item['name'], image: item['photo']));
+    });
+    return items;
+  }
+
+  set currentTabIndex(int index) {
+    _selectedTabIndex = index;
+    notifyListeners();
+  }
+
+  get selectedTabIndex => _selectedTabIndex;
+
   get locationAddress => _locationAddress;
   get loading => _loading;
   get salon => _salon;
+  get salonsByCategory => _salonsByCategory;
 }

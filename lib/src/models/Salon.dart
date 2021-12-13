@@ -1,3 +1,5 @@
+import 'package:zakazi/src/models/Specialist.dart';
+
 class Salon {
   final String id;
   final String name;
@@ -12,6 +14,7 @@ class Salon {
   final String address;
   final List coordinates;
   final String distance;
+  final List<Specialist> specialist;
 
   Salon({
     required this.id,
@@ -27,5 +30,6 @@ class Salon {
     required this.address,
     required this.coordinates,
     required this.distance,
+    required this.specialist,
   });
 }
