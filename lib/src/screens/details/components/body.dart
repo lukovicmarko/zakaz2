@@ -10,6 +10,7 @@ import 'package:zakazi/src/screens/details/components/tabs.dart';
 
 import '../../../data/salonsData.dart';
 import '../../../models/Salon.dart';
+import 'aboutTitle.dart';
 import 'infoTab.dart';
 
 class Body extends StatelessWidget {
@@ -47,110 +48,95 @@ class Body extends StatelessWidget {
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 20.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            salon.name,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 24.sp,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 56.w,
-                          height: 25.h,
-                          decoration: BoxDecoration(
-                            color: kGreenColor,
-                            borderRadius: BorderRadius.circular(23.0),
-                          ),
-                          child: Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
                             child: Text(
-                              'Open',
+                              salon.name,
                               style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 13.sp,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 24.sp,
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      salon.address,
-                      style: TextStyle(
-                        color: kDarkGreyTextColor,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    SizedBox(height: 14.h),
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/icons/solid/rating4stars.svg",
-                          height: 18.h,
-                        ),
-                        SizedBox(width: 10.w),
-                        Text(
-                          '(${salon.numReviews} reviews)',
-                          style: const TextStyle(color: Color(0XFFABAAB1)),
-                        )
-                      ],
-                    ),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 28.h),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                InfoTab(
-                                  icon:
-                                      "assets/icons/stroke/Chrome(stroke).svg",
-                                  name: 'Website',
-                                  onPress: () {},
-                                ),
-                                InfoTab(
-                                  icon: "assets/icons/stroke/Phone(stroke).svg",
-                                  name: 'Call',
-                                  onPress: () {},
-                                ),
-                                InfoTab(
-                                  icon:
-                                      "assets/icons/stroke/Map-pin(stroke).svg",
-                                  name: 'Directions',
-                                  onPress: () {},
-                                ),
-                              ],
+                          Container(
+                            width: 56.w,
+                            height: 25.h,
+                            decoration: BoxDecoration(
+                              color: kGreenColor,
+                              borderRadius: BorderRadius.circular(23.0),
                             ),
-                            SizedBox(height: 25.h),
-                            Text(
-                              "Salon specialists",
-                              style: TextStyle(
-                                fontSize: 15.sp,
-                                fontWeight: FontWeight.w600,
+                            child: Center(
+                              child: Text(
+                                'Open',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
-                            SizedBox(height: 15.h),
-                            Specialists(specialists: salon.specialist),
-                            const Tabs(),
-                            salonsData.selectedTabIndex == 0
-                                ? AboutSalon(salon: salon)
-                                : Container(),
-                          ],
+                          ),
+                        ],
+                      ),
+                      Text(
+                        salon.address,
+                        style: TextStyle(
+                          color: kDarkGreyTextColor,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 14.h),
+                      Row(
+                        children: [
+                          SvgPicture.asset(
+                            "assets/icons/solid/rating4stars.svg",
+                            height: 18.h,
+                          ),
+                          SizedBox(width: 10.w),
+                          Text(
+                            '(${salon.numReviews} reviews)',
+                            style: const TextStyle(color: Color(0XFFABAAB1)),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 28.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InfoTab(
+                            icon: "assets/icons/stroke/Chrome(stroke).svg",
+                            name: 'Website',
+                            onPress: () {},
+                          ),
+                          InfoTab(
+                            icon: "assets/icons/stroke/Phone(stroke).svg",
+                            name: 'Call',
+                            onPress: () {},
+                          ),
+                          InfoTab(
+                            icon: "assets/icons/stroke/Map-pin(stroke).svg",
+                            name: 'Directions',
+                            onPress: () {},
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 25.h),
+                      const AboutTitle(title: "Salon specialists"),
+                      SizedBox(height: 15.h),
+                      Specialists(specialists: salon.specialist),
+                      const Tabs(),
+                      salonsData.selectedTabIndex == 0
+                          ? AboutSalon(salon: salon)
+                          : Container(),
+                    ],
+                  ),
                 ),
               ),
             ),

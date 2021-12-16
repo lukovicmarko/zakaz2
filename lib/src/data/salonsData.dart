@@ -7,6 +7,8 @@ import 'package:zakazi/src/models/Salon.dart';
 import 'package:zakazi/src/models/Specialist.dart';
 import 'package:zakazi/src/modules/http.dart';
 
+import '../models/OpeningHours.dart';
+
 class SalonsData with ChangeNotifier {
   SalonsData() {
     getLocation();
@@ -72,6 +74,7 @@ class SalonsData with ChangeNotifier {
             specialist: salon['specialist'] != null
                 ? buildSpecialistList(salon['specialist'])
                 : [],
+            openingHours: buildOpeningHoursList(salon['openingHours']),
             distance: (Geolocator.distanceBetween(
                       _latitude,
                       _longitude,
@@ -113,6 +116,8 @@ class SalonsData with ChangeNotifier {
         address: salonsResponse["data"]['location']['street'],
         coordinates: salonsResponse["data"]['location']['coordinates'],
         specialist: buildSpecialistList(salonsResponse["data"]['specialist']),
+        openingHours:
+            buildOpeningHoursList(salonsResponse["data"]['openingHours']),
         distance: (Geolocator.distanceBetween(
                   _latitude,
                   _longitude,
@@ -160,6 +165,7 @@ class SalonsData with ChangeNotifier {
               specialist: salon['specialist'] != null
                   ? buildSpecialistList(salon['specialist'])
                   : [],
+              openingHours: buildOpeningHoursList(salon['openingHours']),
               distance: (Geolocator.distanceBetween(
                         _latitude,
                         _longitude,
@@ -183,6 +189,15 @@ class SalonsData with ChangeNotifier {
     final List<Specialist> items = [];
     specialists.forEach((item) {
       items.add(Specialist(name: item['name'], image: item['photo']));
+    });
+    return items;
+  }
+
+  buildOpeningHoursList(hours) {
+    final List<OpeningHours> items = [];
+    hours.forEach((item) {
+      items.add(
+          OpeningHours(startTime: item['startTime'], endTime: item['endTime']));
     });
     return items;
   }

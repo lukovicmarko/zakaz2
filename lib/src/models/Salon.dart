@@ -1,3 +1,4 @@
+import 'package:zakazi/src/models/OpeningHours.dart';
 import 'package:zakazi/src/models/Specialist.dart';
 
 class Salon {
@@ -15,6 +16,7 @@ class Salon {
   final List coordinates;
   final String distance;
   final List<Specialist> specialist;
+  final List<OpeningHours> openingHours;
 
   Salon({
     required this.id,
@@ -31,5 +33,6 @@ class Salon {
     required this.coordinates,
     required this.distance,
     required this.specialist,
+    required this.openingHours,
   });
 }
