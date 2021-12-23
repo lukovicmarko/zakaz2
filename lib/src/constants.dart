@@ -15,6 +15,7 @@ const kButtonColor = Color(0XFF6D5AE6);
 const kPrimaryPurple = Color(0XFF432BDF);
 const kGreenColor = Color(0XFF4DC41F);
 const kTabsColor = Color(0XFF191632);
+const kStarsColor = Color(0XFFFFAB36);
 
 // Form Error
 final RegExp emailValidatorRegExp =

@@ -7,7 +7,6 @@ class Salon {
   final String image;
   final String description;
   final String category;
-  final List reviews;
   final int rating;
   final int numReviews;
   final String website;
@@ -24,7 +23,6 @@ class Salon {
     required this.image,
     required this.description,
     required this.category,
-    required this.reviews,
     required this.rating,
     required this.numReviews,
     required this.website,

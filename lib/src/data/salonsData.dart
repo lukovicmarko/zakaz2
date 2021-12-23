@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:zakazi/src/data/auth.dart';
+import 'package:zakazi/src/models/Review.dart';
 import 'package:zakazi/src/models/Salon.dart';
 import 'package:zakazi/src/models/Specialist.dart';
 import 'package:zakazi/src/modules/http.dart';
@@ -64,7 +65,6 @@ class SalonsData with ChangeNotifier {
             image: salon['photo'],
             description: salon['description'],
             category: salon['category'],
-            reviews: salon['reviews'],
             rating: salon['rating'],
             numReviews: salon['numReviews'],
             website: salon['website'],
@@ -108,7 +108,6 @@ class SalonsData with ChangeNotifier {
         image: salonsResponse["data"]['photo'],
         description: salonsResponse["data"]['description'],
         category: salonsResponse["data"]['category'],
-        reviews: salonsResponse["data"]['reviews'],
         rating: salonsResponse["data"]['rating'],
         numReviews: salonsResponse["data"]['numReviews'],
         website: salonsResponse["data"]['website'],
@@ -155,7 +154,6 @@ class SalonsData with ChangeNotifier {
               image: salon['photo'],
               description: salon['description'],
               category: salon['category'],
-              reviews: salon['reviews'],
               rating: salon['rating'],
               numReviews: salon['numReviews'],
               website: salon['website'],
@@ -185,10 +183,29 @@ class SalonsData with ChangeNotifier {
     notifyListeners();
   }
 
+  buildReviewList(reviews) {
+    final List<Review> items = [];
+    reviews.forEach((item) {
+      items.add(
+        Review(
+          id: item['_id'],
+          rating: item['rating'],
+          comment: item['comment'],
+        ),
+      );
+    });
+    return items;
+  }
+
   buildSpecialistList(specialists) {
     final List<Specialist> items = [];
     specialists.forEach((item) {
-      items.add(Specialist(name: item['name'], image: item['photo']));
+      items.add(
+        Specialist(
+          name: item['name'],
+          image: item['photo'],
+        ),
+      );
     });
     return items;
   }

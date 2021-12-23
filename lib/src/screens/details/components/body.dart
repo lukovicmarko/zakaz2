@@ -8,19 +8,43 @@ import 'package:zakazi/src/screens/details/components/specialist.dart';
 import 'package:zakazi/src/screens/details/components/specialistsCard.dart';
 import 'package:zakazi/src/screens/details/components/tabs.dart';
 
+import '../../../data/reviewsData.dart';
 import '../../../data/salonsData.dart';
+import '../../../models/Review.dart';
 import '../../../models/Salon.dart';
 import 'aboutTitle.dart';
 import 'infoTab.dart';
+import 'salonReview.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
   final Salon salon;
 
   const Body({Key? key, required this.salon}) : super(key: key);
 
   @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  final reviewsData = ReviewsData();
+
+  List<Review> reviews = [];
+
+  void getSalonReviews() async {
+    await reviewsData.getReviews(widget.salon.id);
+    reviews = reviewsData.reviews;
+  }
+
+  @override
+  void initState() {
+    getSalonReviews();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final salonsData = Provider.of<SalonsData>(context);
+
     Size size = MediaQuery.of(context).size;
     return Stack(
       children: [
@@ -29,7 +53,7 @@ class Body extends StatelessWidget {
           height: 333.h,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: NetworkImage(salon.image),
+              image: NetworkImage(widget.salon.image),
               fit: BoxFit.cover,
             ),
           ),
@@ -57,7 +81,7 @@ class Body extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              salon.name,
+                              widget.salon.name,
                               style: TextStyle(
                                 fontWeight: FontWeight.w900,
                                 fontSize: 24.sp,
@@ -85,7 +109,7 @@ class Body extends StatelessWidget {
                         ],
                       ),
                       Text(
-                        salon.address,
+                        widget.salon.address,
                         style: TextStyle(
                           color: kDarkGreyTextColor,
                           fontSize: 14.sp,
@@ -101,7 +125,7 @@ class Body extends StatelessWidget {
                           ),
                           SizedBox(width: 10.w),
                           Text(
-                            '(${salon.numReviews} reviews)',
+                            '(${widget.salon.numReviews} reviews)',
                             style: const TextStyle(color: Color(0XFFABAAB1)),
                           )
                         ],
@@ -130,11 +154,20 @@ class Body extends StatelessWidget {
                       SizedBox(height: 25.h),
                       const AboutTitle(title: "Salon specialists"),
                       SizedBox(height: 15.h),
-                      Specialists(specialists: salon.specialist),
+                      Specialists(specialists: widget.salon.specialist),
                       const Tabs(),
                       salonsData.selectedTabIndex == 0
-                          ? AboutSalon(salon: salon)
-                          : Container(),
+                          ? AboutSalon(salon: widget.salon)
+                          : salonsData.selectedTabIndex == 1
+                              ? Container()
+                              : salonsData.selectedTabIndex == 2
+                                  ? Container()
+                                  : salonsData.selectedTabIndex == 3
+                                      ? SalonReview(
+                                          salon: widget.salon,
+                                          reviews: reviews,
+                                        )
+                                      : Container()
                     ],
                   ),
                 ),

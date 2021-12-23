@@ -12,7 +12,6 @@ class AboutSalon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(salon.distance);
     return Padding(
       padding: EdgeInsets.only(top: 25.h),
       child: Column(
