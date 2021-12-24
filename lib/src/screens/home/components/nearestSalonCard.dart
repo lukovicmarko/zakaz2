@@ -4,6 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:zakazi/src/constants.dart';
 import 'package:zakazi/src/models/Salon.dart';
 
+import '../../../components/reviewStars.dart';
+
 class NearestSalonCard extends StatelessWidget {
   const NearestSalonCard({Key? key, required this.salon, required this.press})
       : super(key: key);
@@ -49,7 +51,7 @@ class NearestSalonCard extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SvgPicture.asset("assets/icons/solid/rating4stars.svg")
+                        ReviewStars(stars: salon.rating)
                       ],
                     ),
                     SizedBox(height: 3.h),

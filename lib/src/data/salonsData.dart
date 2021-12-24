@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:zakazi/src/data/auth.dart';
+import 'package:zakazi/src/models/Category.dart';
 import 'package:zakazi/src/models/Review.dart';
 import 'package:zakazi/src/models/Salon.dart';
 import 'package:zakazi/src/models/Specialist.dart';
@@ -64,7 +65,11 @@ class SalonsData with ChangeNotifier {
             name: salon['name'],
             image: salon['photo'],
             description: salon['description'],
-            category: salon['category'],
+            category: Category(
+              id: salon['category']['_id'],
+              name: salon['category']['name'],
+              image: salon['category']['image'],
+            ),
             rating: salon['rating'],
             numReviews: salon['numReviews'],
             website: salon['website'],
@@ -107,7 +112,6 @@ class SalonsData with ChangeNotifier {
         name: salonsResponse["data"]['name'],
         image: salonsResponse["data"]['photo'],
         description: salonsResponse["data"]['description'],
-        category: salonsResponse["data"]['category'],
         rating: salonsResponse["data"]['rating'],
         numReviews: salonsResponse["data"]['numReviews'],
         website: salonsResponse["data"]['website'],
@@ -153,7 +157,6 @@ class SalonsData with ChangeNotifier {
               name: salon['name'],
               image: salon['photo'],
               description: salon['description'],
-              category: salon['category'],
               rating: salon['rating'],
               numReviews: salon['numReviews'],
               website: salon['website'],
@@ -181,20 +184,6 @@ class SalonsData with ChangeNotifier {
     }
 
     notifyListeners();
-  }
-
-  buildReviewList(reviews) {
-    final List<Review> items = [];
-    reviews.forEach((item) {
-      items.add(
-        Review(
-          id: item['_id'],
-          rating: item['rating'],
-          comment: item['comment'],
-        ),
-      );
-    });
-    return items;
   }
 
   buildSpecialistList(specialists) {

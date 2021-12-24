@@ -3,6 +3,8 @@ import 'package:zakazi/src/data/auth.dart';
 import 'package:zakazi/src/models/Review.dart';
 import 'package:zakazi/src/modules/http.dart';
 
+import '../models/User.dart';
+
 class ReviewsData with ChangeNotifier {
   final List<Review> _reviews = [];
 
@@ -20,6 +22,10 @@ class ReviewsData with ChangeNotifier {
           _reviews.add(
             Review(
               id: review['_id'],
+              user: User(
+                id: review['user']['_id'],
+                name: review['user']['name'],
+              ),
               comment: review['comment'],
               rating: review['rating'],
             ),

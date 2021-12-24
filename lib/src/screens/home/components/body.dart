@@ -9,6 +9,7 @@ import 'package:zakazi/src/data/salonsData.dart';
 import 'package:zakazi/src/screens/home/components/sectionHeader.dart';
 import '../../../data/auth.dart';
 
+import '../../../data/bottomNavigation.dart';
 import '../../search/searchScreen.dart';
 import 'appointmentCard.dart';
 import 'categories.dart';
@@ -26,6 +27,7 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     final userData = Provider.of<AuthData>(context);
     final salonData = Provider.of<SalonsData>(context);
+    final provider = Provider.of<BottomNavigation>(context);
 
     return SafeArea(
       child: Padding(
@@ -39,10 +41,15 @@ class _BodyState extends State<Body> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Image.asset(
-                            userData.user.image,
-                            width: 40.w,
-                            height: 40.h,
+                          GestureDetector(
+                            onTap: () {
+                              provider.currentIndex = 4;
+                            },
+                            child: Image.asset(
+                              userData.user.image,
+                              width: 40.w,
+                              height: 40.h,
+                            ),
                           ),
                           Row(
                             children: [
@@ -56,9 +63,12 @@ class _BodyState extends State<Body> {
                                   border:
                                       Border.all(width: 1, color: kGreyColor),
                                 ),
-                                child: SvgPicture.asset(
-                                  "assets/icons/stroke/bell.svg",
-                                  color: Colors.black,
+                                child: GestureDetector(
+                                  onTap: () {},
+                                  child: SvgPicture.asset(
+                                    "assets/icons/stroke/bell.svg",
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                               SizedBox(width: 10.w),
@@ -72,9 +82,12 @@ class _BodyState extends State<Body> {
                                   border:
                                       Border.all(width: 1, color: kGreyColor),
                                 ),
-                                child: SvgPicture.asset(
-                                  "assets/icons/stroke/Search(stroke).svg",
-                                  color: Colors.black,
+                                child: GestureDetector(
+                                  onTap: () => provider.currentIndex = 3,
+                                  child: SvgPicture.asset(
+                                    "assets/icons/stroke/Heart(stroke).svg",
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ],
@@ -113,18 +126,14 @@ class _BodyState extends State<Body> {
                       SectionHeader(
                         textTitle: "Appointment",
                         textTitleSubtitle: "Today",
-                        press: () => {},
+                        press: () => provider.currentIndex = 2,
                       ),
                       SizedBox(height: 16.h),
-                      const AppointmentCard(),
-                      SizedBox(height: 25.h),
-                      SectionHeader(
-                        textTitle: "Services",
-                        textTitleSubtitle: "View All",
-                        press: () => Navigator.pushNamed(
-                            context, SearchScreen.routeName),
+                      GestureDetector(
+                        onTap: () => provider.currentIndex = 2,
+                        child: const AppointmentCard(),
                       ),
-                      SizedBox(height: 15.h),
+                      SizedBox(height: 30.h),
                       Categories(),
                       SizedBox(height: 5.h),
                       SectionHeader(

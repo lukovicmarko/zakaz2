@@ -1,3 +1,4 @@
+import 'package:zakazi/src/models/Category.dart';
 import 'package:zakazi/src/models/OpeningHours.dart';
 import 'package:zakazi/src/models/Specialist.dart';
 
@@ -6,7 +7,7 @@ class Salon {
   final String name;
   final String image;
   final String description;
-  final String category;
+  final Category? category;
   final int rating;
   final int numReviews;
   final String website;
@@ -22,7 +23,7 @@ class Salon {
     required this.name,
     required this.image,
     required this.description,
-    required this.category,
+    this.category,
     required this.rating,
     required this.numReviews,
     required this.website,

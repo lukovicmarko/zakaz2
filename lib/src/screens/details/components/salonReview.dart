@@ -7,7 +7,7 @@ import 'package:zakazi/src/models/Review.dart';
 import '../../../constants.dart';
 import '../../../data/reviewsData.dart';
 import '../../../models/Salon.dart';
-import 'reviewStars.dart';
+import '../../../components/reviewStars.dart';
 
 class SalonReview extends StatefulWidget {
   const SalonReview({Key? key, required this.salon, required this.reviews})
@@ -99,6 +99,7 @@ class _SalonReviewState extends State<SalonReview> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(widget.reviews[index].user.name),
                   ReviewStars(stars: widget.reviews[index].rating),
                   Text(widget.reviews[index].comment),
                 ],

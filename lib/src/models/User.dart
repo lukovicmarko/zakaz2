@@ -7,8 +7,8 @@ class User {
   User({
     required this.id,
     required this.name,
-    required this.email,
-    required this.image,
+    this.email = '',
+    this.image = '',
   });
   Map<String, dynamic> toJson() {
     return {
